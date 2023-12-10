@@ -38,7 +38,7 @@ def play_music():
 
     if (
         (hour >= 7 and hour < 13) or 
-        (((hour > 14 and minute >= 45) or (hour > 15)) and hour <= 23) or 
+        (((hour == 14 and minute >= 45) or (hour > 15)) and hour <= 23) or 
         (hour >= 1 and hour < 2 and minute >= random_minute and minute <= random_minute + 9) or
         (hour >= 3 and hour < 4 and minute >= random_minute and minute <= random_minute + 9) or
         (hour >= 5 and hour < 6 and minute >= random_minute and minute <= random_minute + 9) or
