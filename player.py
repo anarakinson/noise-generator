@@ -21,7 +21,7 @@ def play_music(music_path):
     # month = time.strftime('%m')
     day = int(time.strftime('%d'))
     hour = int(time.strftime('%H'))
-    if os.name != 'nt':
+    if os.name == 'nt':
         hour += 3
     minute = int(time.strftime('%M'))
     second = int(time.strftime('%S'))
@@ -66,4 +66,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
