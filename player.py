@@ -7,12 +7,14 @@ from pygame import mixer  # Load the popular external library
 import argparse
 
 
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("-tz", "--timezone", help="", default="Europe/Moscow")
     parser.add_argument("-d", "--datapath", help="", default="./data/trancemetal_mp3/")
     args = parser.parse_args()
     return args
+
 
 def play_music(music_path):
     # year = time.strftime('%Y')
@@ -46,8 +48,7 @@ def play_music(music_path):
     time.sleep(10 * 60 + np.random.randint(2, 7) * 60)
 
 
-if __name__ == "__main__":
-
+def main():
     args = parse_args()
 
     mixer.init()
@@ -61,3 +62,8 @@ if __name__ == "__main__":
     while True:
         play_music(args.datapath)
 
+
+
+if __name__ == "__main__":
+    main()
+    
