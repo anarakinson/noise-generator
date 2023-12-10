@@ -4,20 +4,17 @@ import time
 import glob
 import numpy as np
 from pygame import mixer  # Load the popular external library
-import pygame
+import argparse
 
-mixer.init()
 
-os.environ["TZ"] = "Europe/Moscow"
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-tz", "--timezone", help="", default="Europe/Moscow")
+    parser.add_argument("-d", "--datapath", help="", default="./data/trancemetal_mp3/")
+    args = parser.parse_args()
+    return args
 
-if os.name != 'nt':
-    time.tzset()  
-
-curr = time.time()
-
-print(time.strftime("%H:%M:%S"))
-
-def play_music():
+def play_music(music_path):
     # year = time.strftime('%Y')
     # month = time.strftime('%m')
     day = int(time.strftime('%d'))
@@ -29,7 +26,7 @@ def play_music():
 
     random_minute = np.random.randint(10, 30)
 
-    filenames = glob.glob("./data/trancemetal_mp3/*.mp3")
+    filenames = glob.glob(f"{music_path}/*.mp3")
     n = np.random.randint(len(filenames))
     # print(n)
     filename = filenames[n]
@@ -50,6 +47,17 @@ def play_music():
 
 
 if __name__ == "__main__":
+
+    args = parse_args()
+
+    mixer.init()
+    os.environ["TZ"] = args.timezone
+    if os.name != 'nt':
+        time.tzset()  
+
+    curr = time.time()
+    print(time.strftime("%H:%M:%S"))
+
     while True:
-        play_music()
+        play_music(args.datapath)
 
