@@ -10,7 +10,9 @@ import pygame
 mixer.init()
 
 os.environ["TZ"] = "Europe/Moscow"
-# time.tzset()  
+
+if os.name != 'nt':
+    time.tzset()  
 
 curr = time.time()
 
@@ -20,7 +22,9 @@ def play_music():
     # year = time.strftime('%Y')
     # month = time.strftime('%m')
     day = int(time.strftime('%d'))
-    hour = int(time.strftime('%H')) + 3
+    hour = int(time.strftime('%H'))
+    if os.name != 'nt':
+        hour += 3
     minute = int(time.strftime('%M'))
     second = int(time.strftime('%S'))
 
