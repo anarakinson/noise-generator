@@ -1,4 +1,3 @@
-# import playsound
 import os
 import sys
 import time
@@ -44,7 +43,6 @@ def play_music():
         (hour >= 5 and hour < 6 and minute >= random_minute and minute <= random_minute + 9) or
         (hour >= 6 and hour < 7 and minute >= random_minute and minute <= random_minute + 9)
     ):
-        # playsound.playsound(filename, True)
         mixer.music.load(filename)
         mixer.music.play()
 
