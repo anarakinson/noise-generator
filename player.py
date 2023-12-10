@@ -4,8 +4,8 @@ import time
 import glob
 import numpy as np
 from pygame import mixer  # Load the popular external library
+from mutagen.mp3 import MP3
 import argparse
-
 
 
 def parse_args():
@@ -35,9 +35,9 @@ def play_music(music_path):
 
 
     if (
-        (hour >= 7 and hour < 13) or 
-        (((hour == 14 and minute >= 45) or (hour > 15)) and hour <= 23) or 
-        (hour >= 1 and hour < 2 and minute >= random_minute and minute <= random_minute + 9) or
+        (((hour >= 7 and minute >= np.random.randint(15)) or hour >= 8) and hour < 13) or              # 7-13  (7 +- 15)
+        (((hour == 14 and minute >= 45 + np.random.randint(3, 12)) or hour >= 15) and hour <= 23) or   # 15-23 (15 +- 12)
+        (hour >= 1 and hour < 2 and minute >= random_minute and minute <= random_minute + 9) or        # nighttime
         (hour >= 3 and hour < 4 and minute >= random_minute and minute <= random_minute + 9) or
         (hour >= 5 and hour < 6 and minute >= random_minute and minute <= random_minute + 9) or
         (hour >= 6 and hour < 7 and minute >= random_minute and minute <= random_minute + 9)
@@ -45,7 +45,9 @@ def play_music(music_path):
         mixer.music.load(filename)
         mixer.music.play()
 
-    time.sleep(10 * 60 + np.random.randint(2, 7) * 60)
+    audio_lenght = MP3(filename).info.length
+    print(audio_lenght / 60)
+    time.sleep(audio_lenght + np.random.randint(3, 8) * 60)
 
 
 def main():
