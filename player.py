@@ -27,6 +27,7 @@ def play_music(music_path):
     second = int(time.strftime('%S'))
 
     random_minute = np.random.randint(10, 30)
+    night_delay = 4
 
     filenames = glob.glob(f"{music_path}/*.mp3")
     n = np.random.randint(len(filenames))
@@ -35,21 +36,30 @@ def play_music(music_path):
 
 
     if (
-        (((hour >= 7 and minute >= np.random.randint(15)) or hour >= 8) and hour < 13) or              # from (7 +- 15) till 13
-        (((hour == 14 and minute >= 45 + np.random.randint(5, 14)) or hour >= 15) and hour < 23) or   # from (15 +- 15) till 23
-        (hour >= 1 and hour < 2 and minute >= random_minute and minute <= random_minute + 9) or        # from dusk till dawn 
-        (hour >= 3 and hour < 4 and minute >= random_minute and minute <= random_minute + 9) or
-        (hour >= 5 and hour < 6 and minute >= random_minute and minute <= random_minute + 9) or
-        (hour >= 6 and hour < 7 and minute >= random_minute and minute <= random_minute + 9)
+        (((hour >= 7 and minute >= np.random.randint(10, 25)) or hour >= 8) and hour < 13) or              # from (7 +- 15) till 13
+        (((hour == 14 and minute >= 45 + np.random.randint(5, 14)) or hour >= 15) and hour < 23) or    # from (15 +- 15) till 23
+        (hour >= 1 and hour < 2 and minute >= random_minute and minute < random_minute + night_delay) or        # from dusk till dawn 
+        (hour >= 3 and hour < 4 and minute >= random_minute and minute < random_minute + night_delay) or
+        (hour >= 5 and hour < 6 and minute >= random_minute and minute < random_minute + night_delay) or
+        (hour >= 6 and hour < 7 and minute >= random_minute and minute < random_minute + night_delay) 
     ):
         print(os.path.basename(filename), end=" - ")
         mixer.music.load(filename)
         mixer.music.play()
 
+    delay_min = np.random.randint(7, 13)
+    if (hour == 23 and minute >= 10):
+        delay_min = 30
     audio_lenght = MP3(filename).info.length   # get audio lenght
-    print(f"{audio_lenght / 60 : .2f} min")
-    
-    time.sleep(audio_lenght + np.random.randint(7, 13) * 60)  # wait for 10-15 minuts after audio end
+    print(f"{audio_lenght / 60 : .2f} min, delay:", delay_min)
+
+    if (hour >= 23 or hour < 7):
+        time.sleep(night_delay * 60 + 1)
+        mixer.music.stop()
+        return
+    else:
+        time.sleep(audio_lenght + delay_min * 60)  # wait for 10-15 minuts after audio end
+        return
 
 
 def main():
