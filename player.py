@@ -16,12 +16,6 @@ curr = time.time()
 
 print(time.strftime("%H:%M:%S"))
 
-
-def make_sinus(sampleRate = 44100, freq = 56):
-    arr = np.array([4096 * np.sin(2.0 * np.pi * freq * x / sampleRate) for x in range(0, sampleRate)]).astype(np.int16)
-    arr2 = np.c_[arr,arr]
-    return arr2
-
 def play_music():
     # year = time.strftime('%Y')
     # month = time.strftime('%m')
@@ -49,13 +43,6 @@ def play_music():
         # playsound.playsound(filename, True)
         mixer.music.load(filename)
         mixer.music.play()
-
-        # arr2 = make_sinus()
-        # sound = pygame.sndarray.make_sound(arr2)
-        # sound.set_volume(5.0)
-        # sound.play(0)
-        # pygame.time.delay(1000 * 1000)
-        # sound.stop()
 
     time.sleep(10 * 60 + np.random.randint(2, 7) * 60)
 

@@ -16,9 +16,10 @@ def make_sinus():
 
 
 arr2 = make_sinus()
-sound = pygame.sndarray.make_sound(arr2)
+sound = pygame.sndarray.make_sound(arr2)     
+sound.set_volume(5.0)
 sound.play(-1)
-pygame.time.delay(1000 * 1000)
+pygame.time.delay(1000 * 10)
 sound.stop()
 
 # import pysine
