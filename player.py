@@ -51,8 +51,7 @@ def play_music(music_path):
         # from dusk till dawn 
         (hour >= 1 and hour < 2 and minute >= random_minute and minute < random_minute + night_delay and allowed) or 
         (hour >= 3 and hour < 4 and minute >= random_minute and minute < random_minute + night_delay and allowed) or
-        (hour >= 5 and hour < 6 and minute >= random_minute and minute < random_minute + night_delay and allowed) or
-        (hour >= 6 and hour < 7 and minute >= random_minute and minute < random_minute + night_delay and allowed) 
+        (hour >= 5 and hour < 6 and minute >= random_minute and minute < random_minute + night_delay and allowed) 
     ):
         #play track
         print(os.path.basename(filename), end=" - ")
