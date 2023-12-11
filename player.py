@@ -16,6 +16,9 @@ def parse_args():
     return args
 
 
+# global random minute, changed once in few hours
+random_minute = 20
+
 def play_music(music_path):
     # year = time.strftime('%Y')
     # month = time.strftime('%m')
@@ -26,8 +29,11 @@ def play_music(music_path):
     minute = int(time.strftime('%M'))
     second = int(time.strftime('%S'))
 
-    random_minute = np.random.randint(10, 30)
+    global random_minute
     night_delay = 4
+    if (hour % 2 == 0 and minute >= 1 and minute < 10):
+        random_minute = np.random.randint(10, 30)   # at start of hour set random minute when schedule starts
+        allowed = np.random.uniform() < 0.33        # in thirty percent of cases schedule will work at nighttime
 
     filenames = glob.glob(f"{music_path}/*.mp3")
     n = np.random.randint(len(filenames))
@@ -36,30 +42,39 @@ def play_music(music_path):
 
 
     if (
-        (((hour >= 7 and minute >= np.random.randint(10, 25)) or hour >= 8) and hour < 13) or              # from (7 +- 15) till 13
-        (((hour == 14 and minute >= 45 + np.random.randint(5, 14)) or hour >= 15) and hour < 23) or    # from (15 +- 15) till 23
-        (hour >= 1 and hour < 2 and minute >= random_minute and minute < random_minute + night_delay) or        # from dusk till dawn 
-        (hour >= 3 and hour < 4 and minute >= random_minute and minute < random_minute + night_delay) or
-        (hour >= 5 and hour < 6 and minute >= random_minute and minute < random_minute + night_delay) or
-        (hour >= 6 and hour < 7 and minute >= random_minute and minute < random_minute + night_delay) 
+        # from 7 till 13
+        (((hour >= 7 and minute >= np.random.randint(5, 20)) or hour >= 8) and hour < 13) or 
+        # from 15 till 22:30
+        (hour == 14 and minute >= 45 + np.random.randint(5, 14)) or 
+        (hour >= 15 and hour < 22) or  
+        (hour == 22  and minute < 30) or    
+        # from dusk till dawn 
+        (hour >= 1 and hour < 2 and minute >= random_minute and minute < random_minute + night_delay and allowed) or 
+        (hour >= 3 and hour < 4 and minute >= random_minute and minute < random_minute + night_delay and allowed) or
+        (hour >= 5 and hour < 6 and minute >= random_minute and minute < random_minute + night_delay and allowed) or
+        (hour >= 6 and hour < 7 and minute >= random_minute and minute < random_minute + night_delay and allowed) 
     ):
+        #play track
         print(os.path.basename(filename), end=" - ")
         mixer.music.load(filename)
-        mixer.music.play()
+        mixer.music.play() 
 
-    delay_min = np.random.randint(7, 13)
-    if (hour == 23 and minute >= 10):
-        delay_min = 30
-    audio_lenght = MP3(filename).info.length   # get audio lenght
-    print(f"{audio_lenght / 60 : .2f} min, delay:", delay_min)
+        # set delay after track
+        delay_min = np.random.randint(7, 13)
+        # get audio lenght
+        audio_lenght = MP3(filename).info.length   
+        print(f"{hour}:{minute}, {audio_lenght / 60 : .2f} min, delay:", delay_min, random_minute)
 
-    if (hour >= 23 or hour < 7):
-        time.sleep(night_delay * 60 + 1)
-        mixer.music.stop()
-        return
-    else:
-        time.sleep(audio_lenght + delay_min * 60)  # wait for 10-15 minuts after audio end
-        return
+
+        if (hour >= 23 or hour < 7):
+            # play only 5 minutes and stop
+            time.sleep((night_delay + 1) * 60)
+            mixer.music.stop()
+            return
+        else:
+            # wait for 10-15 minuts after audio end
+            time.sleep(audio_lenght + delay_min * 60)  
+            return
 
 
 def main():
